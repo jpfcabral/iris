@@ -62,7 +62,7 @@ def get_batch_prediction(task_id: str):
 
 
 @router.post("/training")
-def training_model(data_path):
+def training_model(data_path: str = "/app/data/iris/iris.data"):
     """Train the model with the given params"""
     result = train_iris_model.apply_async(args=(data_path,))
     task_id = result.id
