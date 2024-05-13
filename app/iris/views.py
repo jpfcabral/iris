@@ -9,6 +9,7 @@ from app.iris.models import IrisEnum
 from app.iris.models import IrisPredictionRequest
 from app.iris.services import IrisPredictionService
 from app.iris.tasks import predict_batch
+from app.iris.tasks import train_iris_model
 
 router = APIRouter()
 
@@ -58,3 +59,12 @@ def get_batch_prediction(task_id: str):
         return async_result.get()
 
     return {"status": "PENDING"}
+
+
+@router.post("/training")
+def training_model(data_path):
+    """Train the model with the given params"""
+    result = train_iris_model.apply_async(args=(data_path,))
+    task_id = result.id
+
+    return {"task_id": task_id}

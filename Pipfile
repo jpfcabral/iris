@@ -11,6 +11,8 @@ tensorflow = "*"
 pydantic-settings = "*"
 loguru = "*"
 celery = {extras = ["redis"], version = "*"}
+pandas = "*"
+scikit-learn = "*"
 
 [dev-packages]
 pre-commit = "*"

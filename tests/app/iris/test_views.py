@@ -5,6 +5,7 @@ from app.iris.models import IrisPredictionRequest
 from app.iris.views import get_batch_prediction
 from app.iris.views import predict_batch_iris_data
 from app.iris.views import predict_single_iris_data
+from app.iris.views import training_model
 
 
 @patch("app.iris.views.IrisEnum")
@@ -29,3 +30,9 @@ def test_get_batch_prediction(predict_batch):
     task_id = "task_id"
     get_batch_prediction(task_id)
     predict_batch.AsyncResult.assert_called_once_with(task_id)
+
+
+@patch("app.iris.views.train_iris_model")
+def test_training_model(train_iris_model):
+    training_model("data")
+    train_iris_model.apply_async.assert_called()
