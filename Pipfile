@@ -13,6 +13,8 @@ loguru = "*"
 celery = {extras = ["redis"], version = "*"}
 pandas = "*"
 scikit-learn = "*"
+mlflow = "*"
+boto3 = "*"
 
 [dev-packages]
 pre-commit = "*"

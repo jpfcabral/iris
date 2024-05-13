@@ -1,6 +1,7 @@
 from typing import List
 
 import keras
+import mlflow.keras
 import numpy as np
 import pandas as pd
 from celery import Celery
@@ -72,6 +73,8 @@ def train_iris_model(data_path: str):
     """
 
     logger.info(f"Training model with data from {data_path}")
+    mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
+    mlflow.keras.autolog()
 
     column_names = ["SepalLengthCm", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm", "Species"]
     iris_data = pd.read_csv(data_path, names=column_names)
@@ -144,6 +147,6 @@ def train_iris_model(data_path: str):
 
     loss, accuracy = model.evaluate(x_test_new, y_test)
 
-    model.save("/app/data/iris/iris_model2.keras")
+    mlflow.keras.log_model(model, "iris_model")
 
     return {"loss": loss, "accuracy": accuracy, "model_path": "/app/data/iris/iris_model2.keras"}
