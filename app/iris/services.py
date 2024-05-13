@@ -10,3 +10,12 @@ class IrisPredictionService:
     def predict(self, data: List[List[float]]):
         result = self.model(data)
         return result.numpy()
+
+    def predict_batch(self, data: List[List[float]]) -> List[List[float]]:
+        result_list = []
+
+        for flower in data:
+            result = self.predict([flower])
+            result_list.append(result)
+
+        return result_list

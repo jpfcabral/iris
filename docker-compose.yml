@@ -8,3 +8,27 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
+    environment:
+      - CELERY_BROKER_URL=pyamqp://guest@broker//
+      - CELERY_BACKEND_URL=redis://backend:6379/0
+
+  iris-predictor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A app.iris.tasks worker --loglevel=debug
+    environment:
+      - CELERY_BROKER_URL=pyamqp://guest@broker//
+      - CELERY_BACKEND_URL=redis://backend:6379/0
+      - C_FORCE_ROOT=true
+
+  broker:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  backend:
+    image: redis
+    ports:
+      - 6379:6379

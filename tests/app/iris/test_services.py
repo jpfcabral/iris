@@ -21,3 +21,15 @@ def test_iris_prediction(load_model):
     service.predict("data")
     model.assert_called_once_with("data")
     result.numpy.assert_called_once()
+
+
+@patch("keras.models.load_model")
+def test_predict_batch(load_model):
+    model = MagicMock()
+    result = MagicMock()
+    model.return_value = result
+    load_model.return_value = model
+    service = IrisPredictionService("model")
+    service.predict_batch("data")
+    model.assert_called()
+    result.numpy.assert_called()

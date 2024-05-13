@@ -8,6 +8,9 @@ fastapi = "*"
 pydantic = "*"
 keras = "*"
 tensorflow = "*"
+pydantic-settings = "*"
+loguru = "*"
+celery = {extras = ["redis"], version = "*"}
 
 [dev-packages]
 pre-commit = "*"
@@ -20,3 +23,4 @@ python_version = "3.11"
 [scripts]
 server = "uvicorn app.main:app --reload"
 unittests = "pytest -vs tests/ --cov app/ --cov-report term-missing"
+iris-predictor = "celery -A app.iris.tasks worker"
