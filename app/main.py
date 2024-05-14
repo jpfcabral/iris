@@ -7,6 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 def health_check():
+    """Health check endpoint"""
     return {"status": "ok"}
 
 

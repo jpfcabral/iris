@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 
 class IrisPredictionRequest(BaseModel):
+    """Request model for Iris prediction"""
+
     sepal_length: float
     sepal_width: float
     petal_length: float
@@ -11,6 +13,8 @@ class IrisPredictionRequest(BaseModel):
 
 
 class IrisEnum(enum.Enum):
+    """Enum for Iris species"""
+
     setosa = 0
     versicolor = 1
     virginica = 2
@@ -24,5 +28,7 @@ class IrisEnum(enum.Enum):
 
 
 class IrisBatchPredictionRequest(BaseModel):
+    """Request model for batch Iris prediction"""
+
     model_id: str = None
     data: list[IrisPredictionRequest]

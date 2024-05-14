@@ -2,6 +2,8 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    """Application settings"""
+
     CELERY_BROKER_URL: str = ""
     CELERY_BACKEND_URL: str = ""
     MLFLOW_TRACKING_URI: str = ""
