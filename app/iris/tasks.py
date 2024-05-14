@@ -35,7 +35,7 @@ def predict(data: List[float]) -> List[float]:
 
 
 @app.task(name="iris.predict_batch", serializer="pickle")
-def predict_batch(data: List[List[float]]) -> List[List[float]]:
+def predict_batch(model_id: str, data: List[List[float]]) -> List[List[float]]:
     """
     Predict a batch of iris flowers
 
@@ -46,7 +46,7 @@ def predict_batch(data: List[List[float]]) -> List[List[float]]:
         List[List[float]]: A list of predictions
     """
     results = []
-    prediction_service = IrisPredictionService("data/iris/iris_model.keras")
+    prediction_service = IrisPredictionService(model_id)
 
     predictions = prediction_service.predict_batch(data)
 
@@ -149,4 +149,4 @@ def train_iris_model(data_path: str):
 
     mlflow.keras.log_model(model, "iris_model")
 
-    return {"loss": loss, "accuracy": accuracy, "model_path": "/app/data/iris/iris_model2.keras"}
+    return {"loss": loss, "accuracy": accuracy}

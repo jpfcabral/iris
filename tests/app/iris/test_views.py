@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from app.iris.models import IrisEnum
+from app.iris.models import IrisBatchPredictionRequest
 from app.iris.models import IrisPredictionRequest
 from app.iris.views import get_batch_prediction
 from app.iris.views import predict_batch_iris_data
@@ -13,14 +13,17 @@ from app.iris.views import training_model
 def test_predict(IrisPredictionService, IrisEnum):
     data = IrisPredictionRequest(sepal_length=1, sepal_width=2, petal_length=3, petal_width=4)
     response = predict_single_iris_data(data)
-    IrisPredictionService.assert_called_once_with("/app/data/iris/iris_model.keras")
+    IrisPredictionService.assert_called_once()
 
 
 @patch("app.iris.views.predict_batch")
 def test_predict_batch(
     predict_batch,
 ):
-    data = [IrisPredictionRequest(sepal_length=1, sepal_width=2, petal_length=3, petal_width=4)]
+    data = IrisBatchPredictionRequest(
+        model_id="model_id",
+        data=[IrisPredictionRequest(sepal_length=1, sepal_width=2, petal_length=3, petal_width=4)],
+    )
     predict_batch_iris_data(data)
     predict_batch.apply_async.assert_called()
 

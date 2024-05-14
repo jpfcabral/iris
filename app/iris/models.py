@@ -21,3 +21,8 @@ class IrisEnum(enum.Enum):
 
     def __str__(self):
         return self.name
+
+
+class IrisBatchPredictionRequest(BaseModel):
+    model_id: str = None
+    data: list[IrisPredictionRequest]

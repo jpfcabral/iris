@@ -15,7 +15,8 @@ def test_predict(IrisPredictionService):
 
 @patch("app.iris.tasks.IrisPredictionService")
 def test_predict_batch(IrisPredictionService):
+    model_id = "model_id"
     data = [[1, 2, 3, 4]]
-    predict_batch(data)
-    IrisPredictionService.assert_called_once_with("data/iris/iris_model.keras")
+    predict_batch(model_id, data)
+    IrisPredictionService.assert_called_once_with(model_id)
     IrisPredictionService.return_value.predict_batch.assert_called_once_with(data)

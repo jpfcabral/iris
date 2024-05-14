@@ -5,6 +5,7 @@ from celery.result import AsyncResult
 from fastapi import APIRouter
 from loguru import logger
 
+from app.iris.models import IrisBatchPredictionRequest
 from app.iris.models import IrisEnum
 from app.iris.models import IrisPredictionRequest
 from app.iris.services import IrisPredictionService
@@ -20,7 +21,7 @@ def predict_single_iris_data(request: IrisPredictionRequest):
     input = np.array(
         [[request.sepal_length, request.sepal_width, request.petal_length, request.petal_width]]
     )
-    prediction_service = IrisPredictionService("/app/data/iris/iris_model.keras")
+    prediction_service = IrisPredictionService()
 
     prediction = prediction_service.predict(input)
 
@@ -33,18 +34,24 @@ def predict_single_iris_data(request: IrisPredictionRequest):
 
 
 @router.post("/predict/batch")
-def predict_batch_iris_data(request: List[IrisPredictionRequest]):
+def predict_batch_iris_data(request: IrisBatchPredictionRequest):
     """Predict a batch of iris flowers"""
+    data = request.data
     input = [
         np.array(
             [[flower.sepal_length, flower.sepal_width, flower.petal_length, flower.petal_width]]
         )
-        for flower in request
+        for flower in data
     ]
 
     logger.info(f"Predicting {len(input)} flowers: {input}")
 
-    async_result: AsyncResult = predict_batch.apply_async(args=(input,))
+    async_result: AsyncResult = predict_batch.apply_async(
+        args=(
+            request.model_id,
+            input,
+        )
+    )
     task_id = async_result.id
 
     return {"task_id": task_id}
