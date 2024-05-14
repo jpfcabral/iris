@@ -145,7 +145,7 @@ def train_iris_model(data_path: str):
     model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
     model.fit(x_train_new, y_train, epochs=700, batch_size=7)
-    logger.info(model)
+
     loss, accuracy = model.evaluate(x_test_new, y_test)
 
     mlflow.keras.log_model(model, "iris_model")
